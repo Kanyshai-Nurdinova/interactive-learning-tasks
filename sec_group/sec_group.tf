@@ -1,17 +1,36 @@
-resource "aws_default_security_group" "external_by_terraform" {
-  vpc_id = aws_vpc.mainvpc.id
+resource "aws_security_group" "external_by_terraform" {
+  //vpc_id = aws_vpc.main.id
+ingress {
+    description      = "TLS from VPC"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["50.194.68.230/32"]
+  }
 
-   ingress_cidr_blocks = [
-    "50.194.68.230/32",
-    "50.194.68.231/32",
-    "0.0.0.0/0",
-    "0.0.0.0/0",
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 3306
+    to_port          = 3306
+    protocol         = "tcp"
+    cidr_blocks      = ["50.194.68.231/32"]
+  }
 
-  ]
-  ingress_rules = [
-    "https-443-tcp",
-    "http-80-tcp",
-  ]
+   ingress {
+    description      = "TLS from VPC"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+   ingress {
+    description      = "TLS from VPC"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
